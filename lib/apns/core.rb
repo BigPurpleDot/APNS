@@ -6,12 +6,13 @@ module APNS
   @host = 'gateway.sandbox.push.apple.com'
   @port = 2195
   # openssl pkcs12 -in mycert.p12 -out client-cert.pem -nodes -clcerts
-  @pem = nil # this should be the path of the pem file not the contentes
+  @pem_path = nil # this should be the path of the pem file not the contents
+  @pem_file = nil # this should be the name of the pem file not the contents
   @pass = nil
   @ca_path = nil #entrust 2048 pem file
 
   class << self
-    attr_accessor :host, :pem, :port, :pass, :ca_path
+    attr_accessor :host, :pem_path, :pem_file, :port, :pass, :ca_path
   end
 
   def self.send_notification(device_token, message, custom_pem = nil)
@@ -60,6 +61,10 @@ module APNS
     sock.close
 
     return apns_feedback
+  end
+
+  def self.pem
+    "#{self.pem_path}#{self.pem_file}"
   end
 
   protected
